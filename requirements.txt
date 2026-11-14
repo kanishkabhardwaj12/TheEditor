@@ -1,0 +1,10 @@
+streamlit
+requests
+httpx
+beautifulsoup4
+trafilatura
+lxml_html_clean
+pydantic
+textstat
+python-dotenv
+spacy==3.7.5

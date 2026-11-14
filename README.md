@@ -1,6 +1,6 @@
-# The Research Assisstant
+# The Editor
 
-The Editorial is a local Streamlit tool for turning a small collection of
+The Editor is a local Streamlit tool for turning a small collection of
 readable sources into an evidence-backed editorial brief, then improving the resulting
 draft without taking control away from the writer.
 

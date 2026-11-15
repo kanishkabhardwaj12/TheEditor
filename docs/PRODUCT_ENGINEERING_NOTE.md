@@ -28,7 +28,7 @@ editorial tension or protect against overclaiming.
 
 ### Prioritized features
 
-- Source-grounded evidence excerpts and clickable links.
+- Generating relevant suggested newsletter angles.
 - Explicit separation of facts, analysis, and speculation.
 - Comparison across sources instead of isolated summaries.
 - A practical writing review with writer-controlled edits.
@@ -37,19 +37,14 @@ editorial tension or protect against overclaiming.
 
 ### Deliberately left out
 
-- Authentication, collaboration, publishing, and a persistent database.
-- Browser automation for paywalls or JavaScript-heavy sites.
-- Automatic publication or blind whole-document rewriting.
+- Authentication, authorization and a persistent database.
 - A browser extension. The current input box is the smallest reliable equivalent
-  for a six-to-eight-hour prototype; a Pocket-style connector would be the next
-  integration.
+  for a six-to-eight-hour prototype.
 
 ### Usefulness measures
 
 - Time from source collection to a publishable story angle.
-- Percentage of factual claims with a traceable source excerpt.
 - Editor acceptance rate for writing suggestions.
-- Rejection rate for suggestions judged stylistic or meaning-changing.
 - Number of briefs that produce a distinct angle rather than a list of summaries.
 - Editor-rated usefulness of the final angle and open questions.
 
@@ -59,8 +54,7 @@ editorial tension or protect against overclaiming.
 
 - `app.py` owns the Streamlit shell and tabs.
 - `src/research/ingest.py` parses URLs and pasted sources.
-- `src/research/extractor.py` uses Trafilatura first, then HTTPX/BeautifulSoup and
-  official feed fallback.
+- `src/research/extractor.py` fetches URLs using HTTPX, attempts extraction with Trafilatura, falls back to BeautifulSoup, and checks for publisher RSS/Atom feeds when needed.
 - `src/research/chunker.py` preserves paragraph boundaries.
 - `src/research/source_summarizer.py` extracts source-linked facts and exact excerpts.
 - `src/research/brief_generator.py` performs comparative synthesis.
@@ -70,21 +64,18 @@ editorial tension or protect against overclaiming.
 
 ### AI versus deterministic logic
 
-Deterministic logic handles URL validation, extraction status, chunking, character
-offsets, overlap detection, sentence segmentation, dependency-based passive voice,
-filler phrases, metrics, and rewrite validation.
+Deterministic logic handles URL validation, extraction status,
+chunking, sentence segmentation, dependency-based passive voice,
+filler phrases, writing metrics, suggestion validation,
+offset checking, and overlap detection.
 
-Qwen2.5:7B through Ollama handles source evidence extraction, comparative synthesis,
-jargon, paragraph clarity, semantic repetition, and awkward phrasing. The application
-does not use OpenAI, Gemini, Groq, or paid APIs.
+Qwen2.5:3B through Ollama handles source evidence extraction,
+comparative synthesis, jargon detection, paragraph clarity,
+and semantic repetition analysis.
 
 ### Failure handling
 
-Blocked, timed-out, redirected, paywalled, and JavaScript-dependent URLs receive an
-explicit status. The extractor does not repeatedly retry blocked pages or attempt to
-bypass protections. Editors can paste inaccessible content manually. Empty or
-navigation-only pages never reach Qwen. If Qwen is unavailable, deterministic writing
-checks remain available; research generation reports the failure.
+HTTP failures, timeouts, blocked responses, and unsuccessful extraction receive explicit statuses. Redirects are followed. Paywalled or JavaScript-dependent pages may require manual content input. The extractor does not attempt to bypass publisher protections. Empty or navigation-only pages are not sent for meaningful source analysis. If Qwen is unavailable, deterministic writing checks remain available; research generation reports the failure.
 
 ### Evidence integrity
 
@@ -95,12 +86,8 @@ and to avoid treating repeated coverage as independent evidence.
 
 ### Next day of work
 
-- Add a Pocket/RSS ingestion connector and persistent brief history.
-- Add a human-facing claim matrix showing which source supports each statement.
-- Add browser rendering only for sources where the publisher explicitly permits it.
-- Add evaluation fixtures with known source conflicts and editor-labeled rewrites.
-- Improve local-model latency with batching and a smaller fast model for first-pass
-  extraction.
+- Extend caching to source analysis so previously analyzed articles can be reused across brief generations, avoiding redundant model inference when the source content and model configuration have not changed.
+- Improve local-model latency through batching and a smaller, faster model for first-pass extraction, while retaining the primary model for more detailed analysis.
 
 ## Editorial judgment
 
@@ -119,6 +106,4 @@ sentences whose length is justified by their structure.
 
 ## Tools and disclosure
 
-I used an AI coding assistant during implementation and personally inspected, tested,
-and iterated on the application code. The application uses Streamlit, spaCy,
-Trafilatura, HTTPX, BeautifulSoup, and local Ollama/Qwen2.5:7B.
+I used an AI coding assistant such as ChatGpt, Copilot and Claude during implementation and personally inspected, tested, and iterated on the application code. The application uses Streamlit, spaCy, Trafilatura, HTTPX, BeautifulSoup, and local Ollama/Qwen2.5:7B.

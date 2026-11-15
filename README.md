@@ -216,5 +216,4 @@ generation will be complete or editorially strong.
   [outputs/draft_before.md](outputs/draft_before.md) and
   [outputs/draft_after.md](outputs/draft_after.md)
 
-The sample files are editorial artifacts for the take-home project. They still require
-human review before publication.
+The sample files are editorial artifacts for the take-home project. 
